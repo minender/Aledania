@@ -37,24 +37,17 @@
         </div>
         </div>
 	</div>--%>
-            <h1 class="span6">Este es el perfil de ${usuario.login}</h1>
-            <div style="margin-top: 100px">${mensaje}</div>
+      <div class="main-center">
+          <div class="row justify-content-center">
+            <h1 class="span6">${usuario.login.substring(0,1).toUpperCase()}${usuario.login.substring(1)}'s Profile</h1>
+          </div>
+          <div class="container">
+           <div class="row justify-content-center" >
            <table>
-             <tr><td>Nombre:</td><td>${usuario.getNombre()}</td></tr>
-             <tr><td>Apellido:</td><td>${usuario.getApellido()}</td></tr>
-             <tr><td>Correo:</td><td>${usuario.getCorreo()}</td></tr>
+             <tr><td>Name:</td><td>${usuario.getNombre()}</td></tr>
+             <tr><td>Last Name:</td><td>${usuario.getApellido()}</td></tr>
+             <tr><td>Mail:</td><td>${usuario.getCorreo()}</td></tr>
+             <tr><td>&nbsp;</td><td><a href="editar"><button type="button" class="btn btn-default">Edit Profile</button></a></td></tr>
             </table>
-            <br>
-            <div class="row" style="margin-left: 3%">
-                <a href="editar">
-                    <button type="button" class="btn row">Editar Perfil</button>
-                </a>
             </div>
-
-        <%--<div class="row-fluid" style="border:1px #ccc solid; padding:10px">
-		<div class="span1" style="border-right: 1px #ccc solid">
-		${usuario.login}
-		</div>
-	</div>
-    </body>
-</html>--%>
+           </div>

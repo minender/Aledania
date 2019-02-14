@@ -1,23 +1,30 @@
-<div class="navbar navbar-inverse navbar-fixed-top">
+<%--<div class="navbar navbar-inverse navbar-fixed-top">
     <div class="navbar-inner">
       <div class="container">
-        <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+        <%--<button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
-        </button>
-        <div class="nav-collapse collapse">
-          <ul class="nav">
-	    <li ${guardarMenu}><a href="guardar" style="padding-right:0px" >Guardar T&eacute;rmino</a></li>
-            <li ${listarTerminosMenu}><a href="listar?comb=n" style="padding-right:0px">listar T&eacute;rminos</a></li>
-            <li ${verTerminosPublicosMenu}><a href="publico?comb=n" style="padding-right:0px">ver t&eacute;rminos publicos</a></li>
-            <li ${misPublicacionesMenu}><a href="mispublic?comb=n" style="padding-right:0px">Mis publicaciones</a></li>
-            <li ${computarMenu}><a href="ingresar" style="padding-right:0px">computar</a></li>
-            <li ${perfilMenu}><a href="./">Perfil</a></li>
-            <li><a href="close">cerrar sesi&oacute;n</a></li>
+        </button>--%>
+        <div class="container-fluid">
+        <nav class="row navbar navbar-expand-lg navbar-dark bg-dark">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#options">
+                <span class="navbar-toggler-icon"></span>    
+            </button>
+          <div class="collapse navbar-collapse" id="options">
+          <ul class="navbar-nav nav-fill w-100">
+            <li class="nav-item ${perfilMenu}"><a href="${fromEvalError}home" class="nav-link">Profile</a></li>
+	    <li class="nav-item ${guardarMenu}" ><a href="${fromEvalError}guardar" class="nav-link">Save Term</a></li>
+            <li class="nav-item ${listarTerminosMenu}"><a href="${fromEvalError}listar?comb=n" class="nav-link">List My Terms</a></li>
+            <li class="nav-item ${misPublicacionesMenu}"><a href="${fromEvalError}mispublic?comb=n" class="nav-link">My Publications</a></li>
+            <li class="nav-item ${verTerminosPublicosMenu}"><a href="${fromEvalError}publico?comb=n" class="nav-link">List Public Terms</a></li>
+            <li class="nav-item ${computarMenu}"><a href="${fromEvalError}ingresar" class="nav-link">Computing</a></li>
+            <li class="nav-item ${theoMenu}" ><a href="${fromEvalError}theo" class="nav-link">Theoretical Basis</a></li>
+            <li class="nav-item ${helpMenu}" ><a href="${fromEvalError}help" class="nav-link">Help</a></li>
+            <li class="nav-item" ><a href="${fromEvalError}close" class="nav-link">Sign Out</a></li>
           </ul>
+          </div>
+        </nav>
+        <%--</div>
         </div>
-        </div>
-        </div>
-	</div>
-     <div class="row-fluid" style="margin-left: 50px; margin-top: 69px; height:552px; width: ${anchuraDiv}; overflow-y:${overflow};">
+        </div>--%>

@@ -1,0 +1,13 @@
+version: '3'
+
+services:
+        db:
+                build: DockerPostgres/
+                image: postgresflaviani
+        web:
+                build: DockerTomcat/
+                image: tomcatflaviani
+                ports:
+                        - "80:8080"
+                depends_on:
+                        - db

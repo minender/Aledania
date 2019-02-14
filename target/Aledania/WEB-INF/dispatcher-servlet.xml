@@ -20,12 +20,12 @@
         ">
  
     <context:annotation-config />
-    <context:component-scan base-package="com.howtodoinjava.controller" />
+    <context:component-scan base-package="com.aledania.controller" />
     <mvc:resources mapping="/static/**" location="/resources/"/>
     <mvc:default-servlet-handler />
     <mvc:annotation-driven />
    
-    <!--<bean id="aspecto" class="com.howtodoinjava.service.Aspectos" />
+    <!--<bean id="aspecto" class="com.aledania.service.Aspectos" />
     <aop:aspectj-autoproxy />-->
     
     <bean class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping" />
@@ -90,11 +90,11 @@
         </property> 
     </bean>
     
-    <bean id="usuarioDAO" class="com.howtodoinjava.dao.UsuarioDaoImpl"></bean>
-    <bean id="usuarioManager" class="com.howtodoinjava.service.UsuarioManagerImpl"></bean>
-    <bean id="terminoDAO" class="com.howtodoinjava.dao.TerminoDaoImpl"></bean>
-    <bean id="PublicacionDAO" class="com.howtodoinjava.dao.PublicacionDAOImpl"></bean>
-    <bean id="terminoManager" class="com.howtodoinjava.service.TerminoManagerImpl"></bean>
+    <bean id="usuarioDAO" class="com.aledania.dao.UsuarioDaoImpl"></bean>
+    <bean id="usuarioManager" class="com.aledania.service.UsuarioManagerImpl"></bean>
+    <bean id="terminoDAO" class="com.aledania.dao.TerminoDaoImpl"></bean>
+    <bean id="PublicacionDAO" class="com.aledania.dao.PublicacionDAOImpl"></bean>
+    <bean id="terminoManager" class="com.aledania.service.TerminoManagerImpl"></bean>
  
     <tx:annotation-driven />
     <bean id="transactionManager"

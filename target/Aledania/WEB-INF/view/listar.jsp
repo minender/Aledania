@@ -9,31 +9,16 @@
 <%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles" %>
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        
-        <script src="${pageContext.request.contextPath}/static/js/jquery.min.js"></script>
-        <%--<script src="${pageContext.request.contextPath}/static/js/jquery.jslatex.packed.js"></script>--%>
-        <%--<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>--%>
-        <script type="text/javascript" src="${pageContext.request.contextPath}/static/js/mathjax-MathJax-v2.3-248-g60e0a8c/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-        <script type="text/javascript" src="${pageContext.request.contextPath}/static/js/ClickOnAlias.js"></script>
-        <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/style.css" >
-        <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/bootstrap.min.css" >
-        <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/bootstrap-responsive.css" >
-        <title>JSP Page</title>
-    </head>
+    <tiles:insertDefinition name="header" />
     <body>
         <c:choose>
                 <c:when test="${perfil.intValue()==1}">
-                    <tiles:insertDefinition name="header" />
+                    <tiles:insertDefinition name="nav" />
                     <h1>${titulo}</h1>
                 </c:when>
         </c:choose>
     
         <script>
-            /*$(function () {
-            $(".latex").latex();
-            });*/
 
             function insertAtCursor(myField, myValue) 
             {            
@@ -65,7 +50,7 @@
 
         <center>
         <table class="table table-striped" border="1">
-            <tr><th>Alias</th><th>T&eacute;rmino</th></tr>
+            <tr><th>Alias</th><th>Term</th></tr>
             <c:forEach var="termino" items="${terminos}">
                 <tr><td><c:choose>
                             <c:when test="${click.equals(yes)}">
@@ -81,17 +66,17 @@
                     <c:when test="${!usuario.getLogin().equals(publico)}">
                         <c:choose>
                             <c:when test="${publicaciones.intValue()==0}">
-                                <td><a href="../${usuario.getLogin()}/modificar?alias=${termino.getId().getAlias()}" >Modificar</a></td>
-                                <td><a href="../${usuario.getLogin()}/modificaralias?aliasv=${termino.getId().getAlias()}" >Modificar Alias</a></td>
-                                <td><a onclick="return confirm('Seguro que desea eliminar el término')" href="../${usuario.getLogin()}/eliminar?alias=${termino.getId().getAlias()}">Eliminar</a></td>
+                                <td><a href="../${usuario.getLogin()}/modificar?alias=${termino.getId().getAlias()}" >Modify</a></td>
+                                <td><a href="../${usuario.getLogin()}/modificaralias?aliasv=${termino.getId().getAlias()}" >Modify Alias</a></td>
+                                <td><a onclick="return confirm('Sure you want to delete the term?')" href="../${usuario.getLogin()}/eliminar?alias=${termino.getId().getAlias()}">Delete</a></td>
                             </c:when>
                             <c:otherwise>
-                                <td><a onclick="return confirm('Seguro que desea eliminar el término')" href="../${usuario.getLogin()}/eliminarpubl?alias=${termino.getId().getAlias()}">Eliminar</a></td>
+                                <td><a onclick="return confirm('Sure you want to delete the term?')" href="../${usuario.getLogin()}/eliminarpubl?alias=${termino.getId().getAlias()}">Delete</a></td>
                             </c:otherwise>
                         </c:choose>
                         <c:choose>
                             <c:when test="${!usuario.getLogin().equals(admin) && publicaciones.intValue()==0}">
-                                <td><a href="../${usuario.getLogin()}/publicar?alias=${termino.getId().getAlias()}">Publicar</a></td>
+                                <td><a href="../${usuario.getLogin()}/publicar?alias=${termino.getId().getAlias()}">Publish</a></td>
                             </c:when>
                         </c:choose>
                     </c:when>
@@ -101,10 +86,10 @@
         </table>
     <c:choose>
         <c:when test="${comb.intValue()==1}">
-            <a href="${accion}?comb=n">Observar en notaci&oacute;n de lambda t&eacute;rminos</a>
+            <a href="${accion}?comb=n">Show in lambda term notation</a>
         </c:when>
         <c:otherwise>
-            <a href="${accion}?comb=y">Observar en notaci&oacute;n de Broda Damas</a>
+            <a href="${accion}?comb=y">Show in Broda Damas notation</a>
         </c:otherwise>
     </c:choose>
             <%--<c:choose>

@@ -1,6 +1,8 @@
-</div>
-<div class="row-fluid" style="border:1px #ccc solid; padding:10px;">
-		<div class="span1" style="border-right: 1px #ccc solid;">
-		${usuario.login}
-		</div>
+<footer>
+ <div class="row footer-div">
+    <span class="footer-login-span" >
+       ${usuario.login}
+    </span>
+ </div>
+</footer>
 </div>

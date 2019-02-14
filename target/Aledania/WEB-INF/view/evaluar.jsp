@@ -11,15 +11,15 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <!--<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>-->
         <script type="text/javascript" src="${pageContext.request.contextPath}/static/js/d3.v3.min.js"></script>
         <script type="text/javascript" src="${pageContext.request.contextPath}/static/js/mathjax-MathJax-v2.3-248-g60e0a8c/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
         <script type="text/javascript" src="${pageContext.request.contextPath}/static/js/ClickOnAlias.js"></script>
         <script type="text/javascript" src="${pageContext.request.contextPath}/static/js/ClickOnAlias2.js"></script>
         <script src="${pageContext.request.contextPath}/static/js/jquery-1.10.2.js"></script>
+        <script src="${pageContext.request.contextPath}/static/js/bootstrap.min.js"></script>
+        <link rel="shortcut icon" href="${pageContext.request.contextPath}/static/img/bluemarine_favicon.ico" type="image/vnd.microsoft.icon" />
         <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/style.css" >
         <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/bootstrap.min.css" >
-        <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/bootstrap-responsive.css" >
         <title>Aledania</title>
 
     </head>
@@ -34,10 +34,17 @@
                 </c:forEach>
             ];
             
+           <c:choose>
+            <c:when test="${nTermsPuros.intValue() >= 0}">
             var termPuros=["${termPuros.get(0)}"
-            <c:forEach var="i" begin="1" end="${nTermsPuros.intValue()}">
+                <c:forEach var="i" begin="1" end="${nTermsPuros.intValue()}">
                    ,"${termPuros.get(i)}"
                 </c:forEach>
+            </c:when>
+            <c:otherwise>
+            var termPuros=[
+            </c:otherwise>
+           </c:choose>
             ];
             
             //var alias=["Succ"];
@@ -48,6 +55,18 @@
                    ,${operations.get(i).toString()}
                 </c:forEach>
             ];
+
+           alias=["${alias.get(0)}"
+           <c:forEach var="i" begin="1" end="${nAlias.intValue()}">
+                  ,"${alias.get(i)}"
+               </c:forEach>
+           ];
+
+           valorAlias=["${valores.get(0)}"
+           <c:forEach var="i" begin="1" end="${nAlias.intValue()}">
+                  ,"${valores.get(i)}"
+               </c:forEach>
+           ];
         
             
             var i=0;
@@ -55,20 +74,6 @@
             function termInicial()
             {
                 var render=document.getElementById('Math1');
-                render.innerHTML="$$~$$ $$"+terminos[0]+"$$";
-              
-                alias=["${alias.get(0)}"
-                <c:forEach var="i" begin="1" end="${nAlias.intValue()}">
-                       ,"${alias.get(i)}"
-                    </c:forEach>
-                ];
-
-                valorAlias=["${valores.get(0)}"
-                <c:forEach var="i" begin="1" end="${nAlias.intValue()}">
-                       ,"${valores.get(i)}"
-                    </c:forEach>
-                ];
-                
                 clickAlias2("Math1",alias, valorAlias);
             }
             
@@ -151,7 +156,7 @@
                 var math1=document.getElementById("Math1");
                 pasosAlante=document.getElementById('pasosAlante');
                 var pasos=parseInt(pasosAlante.value);
-                if(!isNaN(pasos))
+		if(!isNaN(pasos) && pasos > 0)
                 {
                     if(i+pasos <= terminos.length-1)
                     {
@@ -185,7 +190,7 @@
                 var math1=document.getElementById("Math1");
                 pasosAtras=document.getElementById('pasosAtras');
                 var pasos=parseInt(pasosAtras.value);
-                if(!isNaN(pasos))
+		if(!isNaN(pasos) && pasos > 0 )
                 {
                     if(i-pasos >= 0)
                     {
@@ -229,7 +234,7 @@
                     j++;
                 }
                 
-                if(j< operaciones.length && operaciones[j] == 3)
+                if(j< operaciones.length-1 && operaciones[j] == 3)
                 {
                     i=j;
                     clickAlias2("Math1",alias, valorAlias);
@@ -261,10 +266,11 @@
             function nBeta()
             {
                 var math1=document.getElementById("Math1");
-                nBeta=document.getElementById('nBeta');
+                var nBeta=document.getElementById('nBetaForm');
                 var pasos=parseInt(nBeta.value);
-                if(!isNaN(pasos))
+		if(!isNaN(pasos) && pasos > 0 )
                 {
+                    var ini=i;
                     var j=i+1;
                     for(k=1;k<=pasos;k++)
                     {
@@ -272,11 +278,60 @@
                         {
                             j++;
                         }
+                        if(k!=pasos && j < operaciones.length-1 && operaciones[j] == 3)
+                        {
+                            i=j;
+                            j++;
+                        }
                     }
                     
-                    if(j< operaciones.length && operaciones[j] == 3)
+                    if(j< operaciones.length-1 && operaciones[j] == 3)
                     {
                        i=j;
+                       clickAlias2("Math1",alias, valorAlias);
+                       math1.innerHTML="$$~$$ "+"$$\\rightarrow "+terminos[i]+"$$";
+                       MathJax.Hub.Queue(["Typeset",MathJax.Hub,"render"]);
+                    }
+                    else if (i != ini)
+                    {
+                       clickAlias2("Math1",alias, valorAlias);
+                       math1.innerHTML="$$~$$ "+"$$\\rightarrow "+terminos[i]+"$$";
+                       MathJax.Hub.Queue(["Typeset",MathJax.Hub,"render"]);
+                    }
+                }
+            }
+
+            function nBetaAnterior()
+            {
+                var math1=document.getElementById("Math1");
+                var nBeta=document.getElementById('betaPasosAtras');
+                var pasos=parseInt(nBeta.value);
+		if(!isNaN(pasos) && pasos > 0 )
+                {
+                    var ini=i;
+                    var j=i-1;
+                    for(k=1;k<=pasos;k++)
+                    {
+                        while(j> 1 && operaciones[j] != 3)
+                        {
+                            j--;
+                        }
+                        if(k!=pasos && j>0 && operaciones[j] == 3)
+                        {
+                            i=j;
+                            j--;
+                        }
+                    }
+                    
+                    if(j>0 && operaciones[j] == 3)
+                    {
+                       i=j;
+                       clickAlias2("Math1",alias, valorAlias);
+                       math1.innerHTML="$$~$$ "+"$$\\rightarrow "+terminos[i]+"$$";
+                       MathJax.Hub.Queue(["Typeset",MathJax.Hub,"render"]);
+                    }
+                    else if (i != ini)
+                    {
                        clickAlias2("Math1",alias, valorAlias);
                        math1.innerHTML="$$~$$ "+"$$\\rightarrow "+terminos[i]+"$$";
                        MathJax.Hub.Queue(["Typeset",MathJax.Hub,"render"]);
@@ -293,10 +348,10 @@
                     j++;
                 }
                 
-                if(j< operaciones.length && operaciones[j] != 3)
+                if(j< operaciones.length-1 && operaciones[j] != 3)
                 {
                     i=j;
-                    if(operaciones[j] == 1)
+                    if(operaciones[i] == 1)
                     {
                         clickAlias2("Math1",alias, valorAlias);
                         math1.innerHTML="$$\\downarrow$$ "+"$$"+terminos[i]+"$$";
@@ -323,7 +378,7 @@
                 if(j>0 && operaciones[j] != 3)
                 {
                     i=j;
-                    if(operaciones[j] == 1)
+                    if(operaciones[i] == 1)
                     {
                         clickAlias2("Math1",alias, valorAlias);
                         math1.innerHTML="$$\\downarrow$$ "+"$$"+terminos[i]+"$$";
@@ -337,106 +392,210 @@
                 }
                 
             }
+
+            function nTraduc()
+            {
+               var math1=document.getElementById("Math1");
+               var nTra=document.getElementById('nTraducForm');
+               var pasos=parseInt(nTra.value);
+               if(!isNaN(pasos) && pasos > 0 )
+               {
+                   var ini=i;
+                   var j=i+1;
+                   for(k=1;k<=pasos;k++)
+                   {
+                       while(j< operaciones.length-1 && operaciones[j] == 3)
+                       {
+                           j++;
+                       }
+                       if(k!=pasos && j< operaciones.length-1 && operaciones[j] != 3)
+                       {
+                           i=j;
+                           j++;
+                       }
+                       
+                   }
+                    
+                   if(j< operaciones.length-1 && operaciones[j] != 3)
+                   {
+                      i=j;
+                      if(operaciones[i] == 1)
+                      {
+                        clickAlias2("Math1",alias, valorAlias);
+                        math1.innerHTML="$$\\downarrow$$ "+"$$"+terminos[i]+"$$";
+                      }
+                      else if(operaciones[i] == 2)
+                      {
+                        clickAlias("Math1",alias, valorAlias);
+                        math1.innerHTML="$$"+terminos[i]+"$$ "+"$$\\uparrow$$";
+                      }
+                      MathJax.Hub.Queue(["Typeset",MathJax.Hub,"render"]);
+                   }
+                   else if (i != ini)
+                   {
+                      if(operaciones[i] == 1)
+                      {
+                        clickAlias2("Math1",alias, valorAlias);
+                        math1.innerHTML="$$\\downarrow$$ "+"$$"+terminos[i]+"$$";
+                      }
+                      else if(operaciones[i] == 2)
+                      {
+                        clickAlias("Math1",alias, valorAlias);
+                        math1.innerHTML="$$"+terminos[i]+"$$ "+"$$\\uparrow$$";
+                      }
+                      MathJax.Hub.Queue(["Typeset",MathJax.Hub,"render"]);
+                   }
+               }
+
+            }
+
+            function nTraducAnterior()
+            {
+                var math1=document.getElementById("Math1");
+                var nBeta=document.getElementById('traducPasosAtras');
+                var pasos=parseInt(nBeta.value);
+		if(!isNaN(pasos) && pasos > 0 )
+                {
+                    var ini=i;
+                    var j=i-1;
+                    for(k=1;k<=pasos;k++)
+                    {
+                        while(j> 1 && operaciones[j] == 3)
+                        {
+                            j--;
+                        }
+                        if(k!=pasos && j>0 && operaciones[j] != 3)
+                        {
+                            i=j;
+                            j--;
+                        }
+                    }
+                    
+                    if(j>0 && operaciones[j] != 3)
+                    {
+                       i=j;
+                       if(operaciones[i] == 1)
+                       {
+                          clickAlias2("Math1",alias, valorAlias);
+                          math1.innerHTML="$$\\downarrow$$ "+"$$"+terminos[i]+"$$";
+                       }
+                       else if(operaciones[i] == 2)
+                       {
+                          clickAlias("Math1",alias, valorAlias);
+                          math1.innerHTML="$$"+terminos[i]+"$$ "+"$$\\uparrow$$";
+                       }
+                       MathJax.Hub.Queue(["Typeset",MathJax.Hub,"render"]);
+                    }
+                    else if (i != ini)
+                    {
+                       if(operaciones[i] == 1)
+                       {
+                          clickAlias2("Math1",alias, valorAlias);
+                          math1.innerHTML="$$\\downarrow$$ "+"$$"+terminos[i]+"$$";
+                       }
+                       else if(operaciones[i] == 2)
+                       {
+                          clickAlias("Math1",alias, valorAlias);
+                          math1.innerHTML="$$"+terminos[i]+"$$ "+"$$\\uparrow$$";
+                       }
+                       MathJax.Hub.Queue(["Typeset",MathJax.Hub,"render"]);
+                    }
+                }
+            }
             </script>
 
             <tiles:insertDefinition name="headerEval" />
-        <h1>Evaluando</h1>
-        
-        <div id="terminoGrafico"  style="position:relative; overflow:hidden; left:10px; height:30px; width:1060px; top: 390px; z-index:0;"><div id="terminoGraficoDeep" style="position:relative; top:-14px;" ><span id="Math2"></span></div></div>
-        <div id="render"  style="overflow-x: scroll" > <span id="Math1"></span></div>
-        <div  style="background:#ccc; height:127px; overflow-y: auto; overflow-x: auto">
-            <div  height="500" style="float:left">
-                <table>
-                    <tr>
-                        <td>
-                        <input type="button" value="atras" onclick="pasoAnterior()">
-                        </td>
-                        <td>
-                        <input type="button" value="prox" onclick="proxPaso()">
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                        <input type="button" value="betaAnterior" onclick="betaAnterior()">
-                        </td>
-                        <td>
-                        <input type="button" value="proxbeta" onclick="proxBeta()">
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                        <input type="button" value="traducAnterior" onclick="traducAnterior()">
-                        </td>
-                        <td>
-                        <input type="button" value="proxtraduc" onclick="proxTraduc()">
-                        </td>
-                    </tr>
-                </table>
-            </div >
-            <div height="500" style="float:right">
-                <table>
-                    <tr>
-                        <td>
-                        <input type="button" value="npasosAtras" onclick="nPasosAtras()">
-                        </td>
-                        <td>
-                        <input type="text" id="pasosAtras" class="span4" >
-                        </td>
-                        <td>
-                        <input type="button" value="npasos" onclick="nPasos()">
-                        </td>
-                        <td>
-                        <input type="text" class="span4" id="pasosAlante" >
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                        <input type="button" value="nBetaAnterior" onclick="nBetaAnterior()">
-                        </td>
-                        <td>
-                        <input type="text" class="span4" id="betaPasosAtras" >
-                        </td>
-                        <td>
-                        <input type="button" value="nBeta" onclick="nBeta()">
-                        </td>
-                        <td>
-                        <input type="text" class="span4" id="nBeta" >
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                        <input type="button" value="nTraducAnterior" onclick="nTraducAnterior()">
-                        </td>
-                        <td>
-                        <input type="text" class="span4" id="traducPasosAtras" >
-                        </td>
-                        <td>
-                        <input type="button" value="nTraduc" onclick="nTraduc()">
-                        </td>
-                        <td>
-                        <input type="text" class="span4" id="nTraduc" >
-                        </td>
-                    </tr>
-                </table>
+        <h1 id="titulo">Evaluating lambda term</h1>
+
+        <div id="terminoGrafico" style="position:relative; overflow:hidden; left:10px; height:30px; z-index:0;"><div id="terminoGraficoDeep" style="position:relative; top:-14px;" ><span id="Math2"></span></div></div>        
+        <div id="render" class="row justify-content-center" > <span id="Math1">$$~$$ $$${term}$$</span></div>
+
+        <div id="control-panel" >
+            <div class="row control-panel-row">
+                      <div class="col-lg-2">
+                        <button class="btn btn-default" type="button" onclick="pasoAnterior()">Back</button>
+                      </div>
+                        <div class="col-lg-4">
+                        <button class="btn btn-default" type="button" onclick="proxPaso()">Next</button>
+                        </div>
+                        <div class="col-lg-2">
+                        <button class="btn btn-default" type="button" onclick="nPasosAtras()">nBack</button>
+                        </div>
+                        <div class="col-lg-1">
+                        <input type="text" id="pasosAtras" class="form-control" >
+                        </div>
+                        <div class="col-lg-2">
+                        <button class="btn btn-default" type="button" onclick="nPasos()">nNext</button>
+                        </div>
+                        <div class="col-lg-1">
+                        <input type="text" class="form-control" id="pasosAlante" >
+                        </div>
             </div>
+            <div class="row control-panel-row">
+                        <div class="col-lg-2">
+                        <button class="btn btn-default" type="button" onclick="betaAnterior()">Back Beta</button>
+                        </div>
+                        <div class="col-lg-4">
+                        <button class="btn btn-default" type="button" onclick="proxBeta()">Next Beta</button>
+                        </div>
+                        <div class="col-lg-2">
+                        <button class="btn btn-default" type="button" onclick="nBetaAnterior()">nBack Beta</button>
+                        </div>
+                        <div class="col-lg-1">
+                        <input type="text" class="form-control" id="betaPasosAtras" >
+                        </div>
+                        <div class="col-lg-2">
+                        <button class="btn btn-default" type="button" onclick="nBeta()">nNext Beta</button>
+                        </div>
+                        <div class="col-lg-1">
+                        <input type="text" class="form-control" id="nBetaForm" >
+                        </div>
+            </div>
+            <div class="row control-panel-row">
+                        <div class="col-lg-2">
+                        <button class="btn btn-default" type="button" onclick="traducAnterior()">Back Translate</button>
+                        </div>
+                        <div class="col-lg-4">
+                        <button class="btn btn-default" type="button" onclick="proxTraduc()">Next Translate</button>
+                        </div>
+                        <div class="col-lg-2">
+                        <button class="btn btn-default" type="button" onclick="nTraducAnterior()">nBack Translate</button>
+                        </div>
+                        <div class="col-lg-1">
+                        <input type="text" class="form-control" id="traducPasosAtras" >
+                        </div>
+                        <div class="col-lg-2">
+                        <button class="btn btn-default" type="button" onclick="nTraduc()">nNext Translate</button>
+                        </div>
+                        <div class="col-lg-1">
+                        <input type="text" class="form-control" id="nTraducForm" >
+                        </div>
+            </div >
         </div>
         
         
-        <%--<a href="/Aledania/perfil/${usuario.getLogin()}/ingresar">Perfil</a>--%>
-        
         <table>
-            <tr><td>Porcentaje de reducciones:</td> <td>${nReducciones.floatValue()}</td><td>&nbsp;</td></tr>
-            <tr><td>Porcentaje de traducciones:</td> <td>${nTraduc.floatValue()}</td><td id="mensajeClick">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;haga click encima del rectangulo que desee inspeccionar</td></tr>
+            <tr><td>Percent of reductions:</td> <td>${nReducciones.floatValue()}</td><td>&nbsp;</td></tr>
+            <tr><td>Percent of translations:</td> <td>${nTraduc.floatValue()}</td><td id="mensajeClick">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;click on the rectangle you want to inspect</td></tr>
         </table>
-        <div id="zigzageo" style="overflow:hidden; width: 1080px; height: 197px;"><div id="zigzageo-deep"></div></div>
+        </div>
+        <div id="zigzageo" style="overflow:hidden;"><div id="zigzageo-deep"></div></div>
 
         <script>
+          MathJax.Hub.Queue(function () {
             //var rect=document.getElementById("rect1");
             var divTer = document.getElementById("Math2");
             //var x = d3.scale.linear().range([0, 20*106.5]);
             //var y = d3.scale.linear().range([0, 20*49]);
             var zigzagWidth = document.getElementById("zigzageo").offsetWidth;
-            var zigzagHeight = document.getElementById("zigzageo").offsetHeight;
+            var zigzagHeight = $(window).height() - $("#mitad").height()-$("footer").height()-8;
+//            if (zigzagHeight < 100)
+//               zigzagHeight = 100;
+            document.getElementById("zigzageo").style.height = zigzagHeight+"px";
+            //var zigzagHeight = document.getElementById("zigzageo").offsetHeight;
+            var terminoGraficoWidth = zigzagWidth-17;
+            document.getElementById("terminoGrafico").style.width = terminoGraficoWidth+"px";
+            document.getElementById("terminoGrafico").style.top = $("#mitad").height()+zigzagHeight/2-30-$("#menuEval").height()-$("#titulo").height()+"px";
             datos=new Array();
             indiceClick = 0;
             var datosTermPuros=new Array();
@@ -624,7 +783,254 @@
   //          depthY = 1.5;
   //          currentFocus = [innerWidth / 2, height / 2];
             idle = true;
+
+            function mousemoved() {
+            var m = d3.mouse(this);
+
+           /*if ( allFijo || (m[0] - innerWidth / 2 <= 0 && m[1] - height / 2 <= 0))
+               desiredFocus = [innerWidth / 2, height/2];  
+               
+           else if( widthFijo || (m[0] - innerWidth / 2 < 0 && m[1] - height / 2 > 0))
+               desiredFocus = [
+                innerWidth / 2,
+                Math.round((m[1] - height / 2) / depthY) * depthY + height / 2
+              ];
+           else if (heightFijo || (m[0] - innerWidth / 2 > 0 && m[1] - height / 2 <= 0))
+                desiredFocus = [
+                  Math.round((m[0] - innerWidth / 2) / depthX) * depthX + innerWidth / 2,
+                  height / 2
+                ];
+           else if (m[0] - innerWidth / 2 > 0 && m[1] - height / 2 > 0)
+                desiredFocus = [
+                  Math.round((m[0] - innerWidth / 2) / depthX) * depthX + innerWidth / 2,
+                  Math.round((m[1] - height / 2) / depthY) * depthY + height / 2
+                ];*/
+            //var desiredFocus;
+            if (allFijo || grande == 1)
+                desiredFocus = [0,0];
+            else if (widthFijo)
+                desiredFocus = [0,-m[1]*(height-zigzagHeight)/zigzagHeight];
+            else if (heightFijo)
+                desiredFocus = [-m[0]*(width-zigzagWidth)/zigzagWidth,0];
+            else
+                desiredFocus = [-m[0]*(width-zigzagWidth)/zigzagWidth,-m[1]*(height-zigzagHeight)/zigzagHeight];
+
+            moved(desiredFocus);
+            }
             
+            function tGMousemoved ()
+            {
+                var m = d3.mouse(this);
+                if (grande == 1)
+                    tGDesiredFocus = [-m[0]*(tGDeep[0][0].scrollWidth-terminoGraficoWidth)/terminoGraficoWidth,0];
+                else
+                    tGDesiredFocus = [0,0];
+
+                tGMoved(tGDesiredFocus);
+            }
+            
+            function tGMoved(tGDesiredFocus) {
+              d3.timer(function() {
+               // if (idle = Math.abs(desiredFocus[0] - currentFocus[0]) < .5 && Math.abs(desiredFocus[1] - currentFocus[1]) < .5) currentFocus = desiredFocus;
+               // else currentFocus[0] += (desiredFocus[0] - currentFocus[0]) * .05, currentFocus[1] += (desiredFocus[1] - currentFocus[1]) * .05;
+               // deep.style(transform, "translate("+ (innerWidth / 2 - currentFocus[0]) / depthX + "px," + (height / 2 - currentFocus[1]) / depthY + "px)");
+                tGDeep.style(transform, "translate("+ tGDesiredFocus[0] + "px," + tGDesiredFocus[1] + "px)");
+              });
+            }
+
+            function moved(desiredFocus) {
+              if (idle) d3.timer(function() {
+               // if (idle = Math.abs(desiredFocus[0] - currentFocus[0]) < .5 && Math.abs(desiredFocus[1] - currentFocus[1]) < .5) currentFocus = desiredFocus;
+               // else currentFocus[0] += (desiredFocus[0] - currentFocus[0]) * .05, currentFocus[1] += (desiredFocus[1] - currentFocus[1]) * .05;
+               // deep.style(transform, "translate("+ (innerWidth / 2 - currentFocus[0]) / depthX + "px," + (height / 2 - currentFocus[1]) / depthY + "px)");
+                deep.style(transform, "translate("+ desiredFocus[0] + "px," + desiredFocus[1] + "px)");
+                return idle;
+              });
+            }
+            /*svg.append('foreignobject').text('$$\\lambda$$')
+                .attr('x', 10)
+                .attr('y', 10)
+                .attr('requiredExtensions',"http://example.com/SVGExtensions/EmbeddedXHTML")
+                .attr("width", 40)
+                .attr("height", 40)
+                .append('text').text('$$\\lambda$$')
+                .attr('x', 10)
+                .attr('y', 10)
+                .attr('fill', 'black');
+                 MathJax.Hub.Queue(["Typeset",MathJax.Hub,"svg"]);*/
+            //rect=d3.selectAll("rect").data(datos).on("click",clicked);
+            function clicked(d) 
+            {
+//                var constAumentoX = width/15;
+//                var constAumentoY = height/15;
+//                var aux1 = grande ? (30)*constAumentoX :30;
+//                var aux2 = grande ? (30+15)*constAumentoY:30;
+                clickX=d[0];
+                clickY=d[1];
+                if (grande == 0)
+                {
+                    var x = d3.scale.linear().range([4,(width-clickX)*zigzagWidth/10]);
+                    x.domain([d[0], width]); //d[0] +  aux1]);
+                    var y = d3.scale.linear().range([4,(height-clickY)*zigzagHeight/10]);
+                    y.domain([d[1], height]);//d[1] +  aux2]);
+                    $("#mensajeClick").html("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;click on the rectangle border to return to the previous state");
+                }
+                else 
+                {
+                    var x = d3.scale.linear().range([0,width]);
+                    x.domain([0, width]); //d[0] +  aux1]);
+                    var y = d3.scale.linear().range([0,height]);
+                    y.domain([0, height]);//d[1] +  aux2]);
+                    $("#mensajeClick").html("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;click on the rectangle you want to inspect");
+                }
+                if (rect.filter(function(d){return d[0]==clickX && d[1]==clickY})[0][0].innerHTML.charAt(0)=="n")
+                {
+                    if (indiceClick < datosTermPuros.length)
+                       datos[indiceClick][3] = "#ccc";
+                    else
+                       datos[indiceClick][3] = "#2083bd";
+                    indiceClick = rect.filter(function(d){return d[0]==clickX && d[1]==clickY})[0][0].innerHTML.substring(1);
+                    st = terminos[indiceClick];
+                    indiceClick = parseInt(indiceClick)+datosTermPuros.length;
+                    datos[indiceClick][3] = "#ffd119";
+                }
+                else
+                {
+                    if (indiceClick < datosTermPuros.length)
+                       datos[indiceClick][3] = "#ccc";
+                    else
+                       datos[indiceClick][3] = "#2083bd";
+                    indiceClick = rect.filter(function(d){return d[0]==clickX && d[1]==clickY})[0][0].innerHTML.substring(1);
+                    st = termPuros[indiceClick];
+                    indiceClick = parseInt(indiceClick)+1;
+                    datos[indiceClick][3] = "#ffd119";
+                }
+                //y.domain([d[1], 1]).range([d[1] ? 0 : 10, d[1] + 20]);
+
+                if (grande == 1)          
+                    rect.attr("style",function(d){return "stroke:"+d[3]+"; stroke-width: 7;fill: none;";});
+
+                rect.transition()
+                    .duration(750)
+                    .attr("x", function(d) { return x(d[0])-desiredFocus[0] })
+                    .attr("y", function(d) { return y(d[1])-desiredFocus[1] })
+                    .attr("width", function(d) { return deltaX; })
+                    .attr("height", function(d) { return deltaY; });
+                    //.attr("style",function(d){return "stroke:"+d[3][d[5]]+"; stroke-width: 7;fill: none;";});
+                    
+                lineCenterv.transition()
+                    .duration(750)
+                    .attr("x1",function(d){return x(lineCenter(d)['x1'])-desiredFocus[0]})
+                    .attr("y1",function(d){return y(lineCenter(d)['y1'])-desiredFocus[1]})
+                    .attr("x2",function(d){return x(lineCenter(d)['x2'])-desiredFocus[0]})
+                    .attr("y2",function(d){return y(lineCenter(d)['y2'])-desiredFocus[1]});
+                    
+                lineUnaPuntav.transition()
+                  .duration(750)
+                  .attr("x1",function(d){return x(lineUnaPunta(d)['x1'])-desiredFocus[0];})
+                  .attr("y1",function(d){return y(lineUnaPunta(d)['y1'])-desiredFocus[1];})
+                  .attr("x2",function(d){return x(lineUnaPunta(d)['x2'])-desiredFocus[0];})
+                  .attr("y2",function(d){return y(lineUnaPunta(d)['y2'])-desiredFocus[1];});
+                  
+               lineOtraPuntav.transition()
+                  .duration(750)
+                  .attr("x1",function(d){return x(lineOtraPunta(d)['x1'])-desiredFocus[0];})
+                  .attr("y1",function(d){return y(lineOtraPunta(d)['y1'])-desiredFocus[1];})
+                  .attr("x2",function(d){return x(lineOtraPunta(d)['x2'])-desiredFocus[0];})
+                  .attr("y2",function(d){return y(lineOtraPunta(d)['y2'])-desiredFocus[1];});
+                
+               lineTraduc1v.transition()
+                  .duration(750)
+                  .attr("x1",function(d){return x(lineTraduc1(d)['x1'])-desiredFocus[0];})
+                  .attr("y1",function(d){return y(lineTraduc1(d)['y1'])-desiredFocus[1];})
+                  .attr("x2",function(d){return x(lineTraduc1(d)['x2'])-desiredFocus[0];})
+                  .attr("y2",function(d){return y(lineTraduc1(d)['y2'])-desiredFocus[1];})
+                  
+               lineTraduc2v.transition()
+                  .duration(750)
+                  .attr("x1",function(d){return x(lineTraduc2(d)['x1'])-desiredFocus[0];})
+                  .attr("y1",function(d){return y(lineTraduc2(d)['y1'])-desiredFocus[1];})
+                  .attr("x2",function(d){return x(lineTraduc2(d)['x2'])-desiredFocus[0];})
+                  .attr("y2",function(d){return y(lineTraduc2(d)['y2'])-desiredFocus[1];})
+                  
+               lineTraduc3v.transition()
+                  .duration(750)
+                  .attr("x1",function(d){return x(lineTraduc3(d)['x1'])-desiredFocus[0];})
+                  .attr("y1",function(d){return y(lineTraduc3(d)['y1'])-desiredFocus[1];})
+                  .attr("x2",function(d){return x(lineTraduc3(d)['x2'])-desiredFocus[0];})
+                  .attr("y2",function(d){return y(lineTraduc3(d)['y2'])-desiredFocus[1];})
+                  
+              lineTraduc4v.transition()
+                  .duration(750)
+                  .attr("x1",function(d){return x(lineTraduc4(d)['x1'])-desiredFocus[0];})
+                  .attr("y1",function(d){return y(lineTraduc4(d)['y1'])-desiredFocus[1];})
+                  .attr("x2",function(d){return x(lineTraduc4(d)['x2'])-desiredFocus[0];})
+                  .attr("y2",function(d){return y(lineTraduc4(d)['y2'])-desiredFocus[1];})
+                  
+              lineInvTraduc1v.transition()
+                  .duration(750)
+                  .attr("x1",function(d){return x(lineInvTraduc1(d)['x1'])-desiredFocus[0];})
+                  .attr("y1",function(d){return y(lineInvTraduc1(d)['y1'])-desiredFocus[1];})
+                  .attr("x2",function(d){return x(lineInvTraduc1(d)['x2'])-desiredFocus[0];})
+                  .attr("y2",function(d){return y(lineInvTraduc1(d)['y2'])-desiredFocus[1];})
+
+              lineInvTraduc2v.transition()
+                  .duration(750)
+                  .attr("x1",function(d){return x(lineInvTraduc2(d)['x1'])-desiredFocus[0];})
+                  .attr("y1",function(d){return y(lineInvTraduc2(d)['y1'])-desiredFocus[1];})
+                  .attr("x2",function(d){return x(lineInvTraduc2(d)['x2'])-desiredFocus[0];})
+                  .attr("y2",function(d){return y(lineInvTraduc2(d)['y2'])-desiredFocus[1];})
+
+               lineInvTraduc3v.transition()
+                  .duration(750)
+                  .attr("x1",function(d){return x(lineInvTraduc3(d)['x1'])-desiredFocus[0];})
+                  .attr("y1",function(d){return y(lineInvTraduc3(d)['y1'])-desiredFocus[1];})
+                  .attr("x2",function(d){return x(lineInvTraduc3(d)['x2'])-desiredFocus[0];})
+                  .attr("y2",function(d){return y(lineInvTraduc3(d)['y2'])-desiredFocus[1];})
+                  
+               lineInvTraduc4v.transition()
+                  .duration(750)
+                  .attr("x1",function(d){return x(lineInvTraduc4(d)['x1'])-desiredFocus[0];})
+                  .attr("y1",function(d){return y(lineInvTraduc4(d)['y1'])-desiredFocus[1];})
+                  .attr("x2",function(d){return x(lineInvTraduc4(d)['x2'])-desiredFocus[0];})
+                  .attr("y2",function(d){return y(lineInvTraduc4(d)['y2'])-desiredFocus[1];})
+                
+                betaVectorizadav.transition()
+                  .duration(750)
+                  .attr("d",function(d){return zoomBeta(d,x,y,desiredFocus);})
+                if(grande == 0)
+                {
+                    idle = false;
+                 //   despX = x(0);
+                 //   despY = y(0);
+                    deltaX = 5;
+                    deltaY = 5;
+                    grande =1;
+                    desiredFocus = [0,0];
+                    $("#Math2").css({ opacity: 0 });
+                    divTer.innerHTML="$$"+st+"$$";
+                    clickAlias("Math2",alias, valorAlias);
+                    document.getElementById("terminoGrafico").style.zIndex=1;
+                    $("#Math2").fadeTo(2000,1);
+                    MathJax.Hub.Queue(["Typeset",MathJax.Hub,divTer]);
+                }
+                else
+                {
+                    idle = true
+                 //   despX = 0;
+                 //   despY = 0;
+                    tGMoved([0,0]);
+                    deltaX = zigzagWidth-7;
+                    deltaY = zigzagHeight-7;
+                    grande = 0;
+                    document.getElementById("terminoGrafico").style.zIndex=0;
+                    divTer.innerHTML="";
+                    MathJax.Hub.Queue(["Typeset",MathJax.Hub,divTer]);
+                }
+                
+            }
+          });
+
             function lineCenter(d)
             {
                 var r;
@@ -858,246 +1264,7 @@
                 return "translate("+x1+","+x2+")";
             }*/
             
-                  
-            function mousemoved() {
-            var m = d3.mouse(this);
-
-           /*if ( allFijo || (m[0] - innerWidth / 2 <= 0 && m[1] - height / 2 <= 0))
-               desiredFocus = [innerWidth / 2, height/2];  
-               
-           else if( widthFijo || (m[0] - innerWidth / 2 < 0 && m[1] - height / 2 > 0))
-               desiredFocus = [
-                innerWidth / 2,
-                Math.round((m[1] - height / 2) / depthY) * depthY + height / 2
-              ];
-           else if (heightFijo || (m[0] - innerWidth / 2 > 0 && m[1] - height / 2 <= 0))
-                desiredFocus = [
-                  Math.round((m[0] - innerWidth / 2) / depthX) * depthX + innerWidth / 2,
-                  height / 2
-                ];
-           else if (m[0] - innerWidth / 2 > 0 && m[1] - height / 2 > 0)
-                desiredFocus = [
-                  Math.round((m[0] - innerWidth / 2) / depthX) * depthX + innerWidth / 2,
-                  Math.round((m[1] - height / 2) / depthY) * depthY + height / 2
-                ];*/
-            //var desiredFocus;
-            if (allFijo || grande == 1)
-                desiredFocus = [0,0];
-            else if (widthFijo)
-                desiredFocus = [0,-m[1]*(height-zigzagHeight)/zigzagHeight];
-            else if (heightFijo)
-                desiredFocus = [-m[0]*(width-zigzagWidth)/zigzagWidth,0];
-            else
-                desiredFocus = [-m[0]*(width-zigzagWidth)/zigzagWidth,-m[1]*(height-zigzagHeight)/zigzagHeight];
-
-            moved(desiredFocus);
-            }
-            
-            function tGMousemoved ()
-            {
-                var m = d3.mouse(this);
-                if (grande == 1)
-                    tGDesiredFocus = [-m[0]*(tGDeep[0][0].scrollWidth-1060)/1060,0];
-                else
-                    tGDesiredFocus = [0,0];
-
-                tGMoved(tGDesiredFocus);
-            }
-            
-            function tGMoved(tGDesiredFocus) {
-              d3.timer(function() {
-               // if (idle = Math.abs(desiredFocus[0] - currentFocus[0]) < .5 && Math.abs(desiredFocus[1] - currentFocus[1]) < .5) currentFocus = desiredFocus;
-               // else currentFocus[0] += (desiredFocus[0] - currentFocus[0]) * .05, currentFocus[1] += (desiredFocus[1] - currentFocus[1]) * .05;
-               // deep.style(transform, "translate("+ (innerWidth / 2 - currentFocus[0]) / depthX + "px," + (height / 2 - currentFocus[1]) / depthY + "px)");
-                tGDeep.style(transform, "translate("+ tGDesiredFocus[0] + "px," + tGDesiredFocus[1] + "px)");
-              });
-            }
-
-            function moved(desiredFocus) {
-              if (idle) d3.timer(function() {
-               // if (idle = Math.abs(desiredFocus[0] - currentFocus[0]) < .5 && Math.abs(desiredFocus[1] - currentFocus[1]) < .5) currentFocus = desiredFocus;
-               // else currentFocus[0] += (desiredFocus[0] - currentFocus[0]) * .05, currentFocus[1] += (desiredFocus[1] - currentFocus[1]) * .05;
-               // deep.style(transform, "translate("+ (innerWidth / 2 - currentFocus[0]) / depthX + "px," + (height / 2 - currentFocus[1]) / depthY + "px)");
-                deep.style(transform, "translate("+ desiredFocus[0] + "px," + desiredFocus[1] + "px)");
-                return idle;
-              });
-            }
-            /*svg.append('foreignobject').text('$$\\lambda$$')
-                .attr('x', 10)
-                .attr('y', 10)
-                .attr('requiredExtensions',"http://example.com/SVGExtensions/EmbeddedXHTML")
-                .attr("width", 40)
-                .attr("height", 40)
-                .append('text').text('$$\\lambda$$')
-                .attr('x', 10)
-                .attr('y', 10)
-                .attr('fill', 'black');
-                 MathJax.Hub.Queue(["Typeset",MathJax.Hub,"svg"]);*/
-            //rect=d3.selectAll("rect").data(datos).on("click",clicked);
-            function clicked(d) 
-            {
-//                var constAumentoX = width/15;
-//                var constAumentoY = height/15;
-//                var aux1 = grande ? (30)*constAumentoX :30;
-//                var aux2 = grande ? (30+15)*constAumentoY:30;
-                clickX=d[0];
-                clickY=d[1];
-                if (grande == 0)
-                {
-                    var x = d3.scale.linear().range([4,(width-clickX)*zigzagWidth/10]);
-                    x.domain([d[0], width]); //d[0] +  aux1]);
-                    var y = d3.scale.linear().range([4,(height-clickY)*zigzagHeight/10]);
-                    y.domain([d[1], height]);//d[1] +  aux2]);
-                    $("#mensajeClick").html("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;haga click encima del marco del rectangulo para volver al estado anterior");
-                }
-                else 
-                {
-                    var x = d3.scale.linear().range([0,width]);
-                    x.domain([0, width]); //d[0] +  aux1]);
-                    var y = d3.scale.linear().range([0,height]);
-                    y.domain([0, height]);//d[1] +  aux2]);
-                    $("#mensajeClick").html("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;haga click encima del rectangulo que desee inspeccionar");
-                }
-                if (rect.filter(function(d){return d[0]==clickX && d[1]==clickY})[0][0].innerHTML.charAt(0)=="n")
-                {
-                    datos[indiceClick][3] = "#2083bd";
-                    indiceClick = rect.filter(function(d){return d[0]==clickX && d[1]==clickY})[0][0].innerHTML.substring(1);
-                    st = terminos[indiceClick];
-                    indiceClick = parseInt(indiceClick)+datosTermPuros.length;
-                    datos[indiceClick][3] = "#ffd119";
-                }
-                else
-                {
-                    datos[indiceClick][3] = "#ccc";
-                    indiceClick = rect.filter(function(d){return d[0]==clickX && d[1]==clickY})[0][0].innerHTML.substring(1);
-                    st = termPuros[indiceClick];
-                    indiceClick = parseInt(indiceClick)+1;
-                    datos[indiceClick][3] = "#ffd119";
-                }
-                //y.domain([d[1], 1]).range([d[1] ? 0 : 10, d[1] + 20]);
-
-                if (grande == 1)          
-                    rect.attr("style",function(d){return "stroke:"+d[3]+"; stroke-width: 7;fill: none;";});
-
-                rect.transition()
-                    .duration(750)
-                    .attr("x", function(d) { return x(d[0])-desiredFocus[0] })
-                    .attr("y", function(d) { return y(d[1])-desiredFocus[1] })
-                    .attr("width", function(d) { return deltaX; })
-                    .attr("height", function(d) { return deltaY; });
-                    //.attr("style",function(d){return "stroke:"+d[3][d[5]]+"; stroke-width: 7;fill: none;";});
-                    
-                lineCenterv.transition()
-                    .duration(750)
-                    .attr("x1",function(d){return x(lineCenter(d)['x1'])-desiredFocus[0]})
-                    .attr("y1",function(d){return y(lineCenter(d)['y1'])-desiredFocus[1]})
-                    .attr("x2",function(d){return x(lineCenter(d)['x2'])-desiredFocus[0]})
-                    .attr("y2",function(d){return y(lineCenter(d)['y2'])-desiredFocus[1]});
-                    
-                lineUnaPuntav.transition()
-                  .duration(750)
-                  .attr("x1",function(d){return x(lineUnaPunta(d)['x1'])-desiredFocus[0];})
-                  .attr("y1",function(d){return y(lineUnaPunta(d)['y1'])-desiredFocus[1];})
-                  .attr("x2",function(d){return x(lineUnaPunta(d)['x2'])-desiredFocus[0];})
-                  .attr("y2",function(d){return y(lineUnaPunta(d)['y2'])-desiredFocus[1];});
-                  
-               lineOtraPuntav.transition()
-                  .duration(750)
-                  .attr("x1",function(d){return x(lineOtraPunta(d)['x1'])-desiredFocus[0];})
-                  .attr("y1",function(d){return y(lineOtraPunta(d)['y1'])-desiredFocus[1];})
-                  .attr("x2",function(d){return x(lineOtraPunta(d)['x2'])-desiredFocus[0];})
-                  .attr("y2",function(d){return y(lineOtraPunta(d)['y2'])-desiredFocus[1];});
-                
-               lineTraduc1v.transition()
-                  .duration(750)
-                  .attr("x1",function(d){return x(lineTraduc1(d)['x1'])-desiredFocus[0];})
-                  .attr("y1",function(d){return y(lineTraduc1(d)['y1'])-desiredFocus[1];})
-                  .attr("x2",function(d){return x(lineTraduc1(d)['x2'])-desiredFocus[0];})
-                  .attr("y2",function(d){return y(lineTraduc1(d)['y2'])-desiredFocus[1];})
-                  
-               lineTraduc2v.transition()
-                  .duration(750)
-                  .attr("x1",function(d){return x(lineTraduc2(d)['x1'])-desiredFocus[0];})
-                  .attr("y1",function(d){return y(lineTraduc2(d)['y1'])-desiredFocus[1];})
-                  .attr("x2",function(d){return x(lineTraduc2(d)['x2'])-desiredFocus[0];})
-                  .attr("y2",function(d){return y(lineTraduc2(d)['y2'])-desiredFocus[1];})
-                  
-               lineTraduc3v.transition()
-                  .duration(750)
-                  .attr("x1",function(d){return x(lineTraduc3(d)['x1'])-desiredFocus[0];})
-                  .attr("y1",function(d){return y(lineTraduc3(d)['y1'])-desiredFocus[1];})
-                  .attr("x2",function(d){return x(lineTraduc3(d)['x2'])-desiredFocus[0];})
-                  .attr("y2",function(d){return y(lineTraduc3(d)['y2'])-desiredFocus[1];})
-                  
-              lineTraduc4v.transition()
-                  .duration(750)
-                  .attr("x1",function(d){return x(lineTraduc4(d)['x1'])-desiredFocus[0];})
-                  .attr("y1",function(d){return y(lineTraduc4(d)['y1'])-desiredFocus[1];})
-                  .attr("x2",function(d){return x(lineTraduc4(d)['x2'])-desiredFocus[0];})
-                  .attr("y2",function(d){return y(lineTraduc4(d)['y2'])-desiredFocus[1];})
-                  
-              lineInvTraduc1v.transition()
-                  .duration(750)
-                  .attr("x1",function(d){return x(lineInvTraduc1(d)['x1'])-desiredFocus[0];})
-                  .attr("y1",function(d){return y(lineInvTraduc1(d)['y1'])-desiredFocus[1];})
-                  .attr("x2",function(d){return x(lineInvTraduc1(d)['x2'])-desiredFocus[0];})
-                  .attr("y2",function(d){return y(lineInvTraduc1(d)['y2'])-desiredFocus[1];})
-
-              lineInvTraduc2v.transition()
-                  .duration(750)
-                  .attr("x1",function(d){return x(lineInvTraduc2(d)['x1'])-desiredFocus[0];})
-                  .attr("y1",function(d){return y(lineInvTraduc2(d)['y1'])-desiredFocus[1];})
-                  .attr("x2",function(d){return x(lineInvTraduc2(d)['x2'])-desiredFocus[0];})
-                  .attr("y2",function(d){return y(lineInvTraduc2(d)['y2'])-desiredFocus[1];})
-
-               lineInvTraduc3v.transition()
-                  .duration(750)
-                  .attr("x1",function(d){return x(lineInvTraduc3(d)['x1'])-desiredFocus[0];})
-                  .attr("y1",function(d){return y(lineInvTraduc3(d)['y1'])-desiredFocus[1];})
-                  .attr("x2",function(d){return x(lineInvTraduc3(d)['x2'])-desiredFocus[0];})
-                  .attr("y2",function(d){return y(lineInvTraduc3(d)['y2'])-desiredFocus[1];})
-                  
-               lineInvTraduc4v.transition()
-                  .duration(750)
-                  .attr("x1",function(d){return x(lineInvTraduc4(d)['x1'])-desiredFocus[0];})
-                  .attr("y1",function(d){return y(lineInvTraduc4(d)['y1'])-desiredFocus[1];})
-                  .attr("x2",function(d){return x(lineInvTraduc4(d)['x2'])-desiredFocus[0];})
-                  .attr("y2",function(d){return y(lineInvTraduc4(d)['y2'])-desiredFocus[1];})
-                
-                betaVectorizadav.transition()
-                  .duration(750)
-                  .attr("d",function(d){return zoomBeta(d,x,y,desiredFocus);})
-                if(grande == 0)
-                {
-                    idle = false;
-                 //   despX = x(0);
-                 //   despY = y(0);
-                    deltaX = 5;
-                    deltaY = 5;
-                    grande =1;
-                    desiredFocus = [0,0];
-                    $("#Math2").css({ opacity: 0 });
-                    divTer.innerHTML="$$"+st+"$$";
-                    clickAlias("Math2",alias, valorAlias);
-                    document.getElementById("terminoGrafico").style.zIndex=1;
-                    $("#Math2").fadeTo(2000,1);
-                    MathJax.Hub.Queue(["Typeset",MathJax.Hub,divTer]);
-                }
-                else
-                {
-                    idle = true
-                 //   despX = 0;
-                 //   despY = 0;
-                    tGMoved([0,0]);
-                    deltaX = zigzagWidth-7;
-                    deltaY = zigzagHeight-7;
-                    grande = 0;
-                    document.getElementById("terminoGrafico").style.zIndex=0;
-                    divTer.innerHTML="";
-                    MathJax.Hub.Queue(["Typeset",MathJax.Hub,divTer]);
-                }
-                
-            }
+                 
         </script>
         <tiles:insertDefinition name="footer" />
     </body>

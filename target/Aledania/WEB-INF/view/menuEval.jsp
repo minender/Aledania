@@ -1,23 +1,22 @@
-<div class="navbar navbar-inverse navbar-fixed-top">
-    <div class="navbar-inner">
-      <div class="container">
-        <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-        </button>
-        <div class="nav-collapse collapse">
-          <ul class="nav">
-	    <li><a href="../perfil/${usuario.login}/guardar" style="padding-right:0px" >Guardar T&eacute;rmino</a></li>
-            <li><a href="../perfil/${usuario.login}/listar?comb=n" style="padding-right:0px">listar T&eacute;rminos</a></li>
-            <li><a href="../perfil/${usuario.login}/publico?comb=n" style="padding-right:0px">ver t&eacute;rminos publicos</a></li>
-            <li><a href="../perfil/${usuario.login}/mispublic?comb=n" style="padding-right:0px">Mis publicaciones</a></li>
-            <li><a href="../perfil/${usuario.login}/ingresar" style="padding-right:0px">computar</a></li>
-            <li><a href="../perfil/${usuario.login}">Perfil</a></li>
-            <li><a href="../perfil/${usuario.login}/close">cerrar sesi&oacute;n</a></li>
+     <div class="container-fluid">
+       <div id="mitad">
+        <div id="menuEval">
+        <nav class="row navbar navbar-expand-lg navbar-dark bg-dark">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#options">
+                <span class="navbar-toggler-icon"></span>    
+            </button>
+          <div class="collapse navbar-collapse" id="options">
+          <ul class="navbar-nav nav-fill w-100">
+            <li class="nav-item"><a href="../perfil/${usuario.login}/home" class="nav-link">Profile</a></li>
+	    <li class="nav-item" ><a href="../perfil/${usuario.login}/guardar" class="nav-link">Save Term</a></li>
+            <li class="nav-item"><a href="../perfil/${usuario.login}/listar?comb=n" class="nav-link">List My Terms</a></li>
+            <li class="nav-item"><a href="../perfil/${usuario.login}/mispublic?comb=n" class="nav-link">My Publications</a></li>
+            <li class="nav-item"><a href="../perfil/${usuario.login}/publico?comb=n" class="nav-link">List Public Terms</a></li>
+            <li class="nav-item"><a href="../perfil/${usuario.login}/ingresar" class="nav-link">Computing</a></li>
+            <li class="nav-item"><a href="../perfil/${usuario.login}/theo" class="nav-link">Theoretical Basis</a></li>
+            <li class="nav-item"><a href="../perfil/${usuario.login}/help" class="nav-link">Help</a></li>
+            <li class="nav-item"><a href="../perfil/${usuario.login}/close" class="nav-link">Sign Out</a></li>
           </ul>
+          </div>
+        </nav>
         </div>
-        </div>
-        </div>
-	</div>
-     <div class="row-fluid" style="margin-left: 50px; margin-top: 69px; height:552px; width: 1100px; overflow: hidden;">

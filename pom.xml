@@ -1,7 +1,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  <groupId>com.howtodoinjava.app</groupId>
+  <groupId>com.aledania.app</groupId>
   <artifactId>Aledania</artifactId>
   <packaging>war</packaging>
   <version>1.0-SNAPSHOT</version>
@@ -15,7 +15,7 @@
 		</repository>
 	</repositories>
   <properties>
-    <org.springframework.version>4.3.11.RELEASE</org.springframework.version>
+    <org.springframework.version>4.3.18.RELEASE</org.springframework.version>
   </properties>
   <dependencies>
     <dependency>
@@ -299,12 +299,13 @@
       <version>1.6.10</version>
       <type>jar</type>
     </dependency>
-    <dependency>
+<!--    <dependency>
       <groupId>org.aspectj</groupId>
       <artifactId>aspectjmatcher</artifactId>
       <version>1.6.11</version>
       <type>jar</type>
     </dependency>
+-->
     <dependency>
      <groupId>commons-codec</groupId>
        <artifactId>commons-codec</artifactId>

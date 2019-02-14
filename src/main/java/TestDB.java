@@ -10,9 +10,9 @@ public class TestDB {
 	{
 		try
 		{
-		String url = "jdbc:postgresql://127.0.0.1:5432/aledania";
-		String user = "postgres";
-		String password = "12345";
+		String url = "jdbc:postgresql://db:5432/dbname";
+		String user = "dbuser";
+		String password = "password";
 
 		// Load the Connector/J driver
 		Class.forName("org.postgresql.Driver").newInstance();

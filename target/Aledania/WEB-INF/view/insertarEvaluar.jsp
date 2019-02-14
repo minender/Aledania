@@ -10,65 +10,54 @@
 <%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles" %>
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <script src="${pageContext.request.contextPath}/static/js/jquery.min.js"></script>
-        <script type="text/javascript" src="${pageContext.request.contextPath}/static/js/desplegar.js"></script>
-        <script type="text/javascript">
-            function limpiar()
-            {
-                var texArea=document.getElementById('termino_string');
-                if(texArea.value != "")
-                {
-                    if(confirm("Seguro que desea borrar el contenido del área de texto"))
-                        texArea.value="";
-                }
-            }
-        </script>
-        <base href="/Aledania/perfil/${usuario.login}/"/>
-        <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/style.css" >
-        <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/bootstrap.min.css" >
-        <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/bootstrap-responsive.css" >
-        <tiles:insertDefinition name="style" />
-        <title>Aledania</title>
-    </head>
+    <tiles:insertDefinition name="header" />
     <body>
-        <tiles:insertDefinition name="header" />
-        <h1>Inserte su t&eacute;rmino a computar</h1>
-    <center>
+        <tiles:insertDefinition name="nav" />
+        <h1>Insert the Term to Compute</h1>
     <sf:form action="/Aledania/eval/${usuario.getLogin()}" method="POST" modelAttribute="insertarEvaluar">
-        <!--N&uacute;mero m&aacute;ximo de beta reducciones:<br/>-->
-        Nombre del algoritmo: <sf:input path="nombre" id="algoritmo_nombre" value="${nombre}"/><sf:errors path="nombre" cssClass="error" /><br/>
-        Término:<br><sf:textarea path="algoritmo" id="termino_string" style="height: 80px; width: 526px;" /><sf:errors path="algoritmo" cssClass="error" /><br/>
-            <input type="submit" value="Computar"> <input type="button" value="limpiar" onclick="limpiar()">
+      <div class="form-group row justify-content-center">
+        <label for="algoritmo_nombre" class="col-lg-2 col-form-label">Max Reductions Number:</label>
+
+       <div class="col-lg-3">
+<sf:input path="nombre" id="algoritmo_nombre" value="500" class="form-control" /><sf:errors path="nombre" cssClass="error" /><br/>
+       </div>
+      </div>
+      <div class="form-group row justify-content-center">
+       <label for="termino_string" class="col-lg-1 col-form-label">Term:</label>
+       <sf:textarea path="algoritmo" id="termino_string" rows="3" class="form-control col-lg-6"/><sf:errors path="algoritmo" cssClass="error" /><br/>
+      </div>
+      <div class="form-group row justify-content-center">
+         <button type="submit" class="btn btn-default">Computing</button> &nbsp;
+         <button type="button" onclick="limpiar()" class="btn btn-default">Clean</button>
+      </div>
     </sf:form> ${mensaje}
-    </center>
-           <%-- <a href="/Aledania/perfil/${usuario.getLogin()}">Perfil</a>--%>
             
         <script>
             t=document.getElementById('termino_string');
             t.innerText="${termino}";
         </script>
+        <div style="height: 50vh;">
         <c:choose>
             <c:when test="${!usuario.getLogin().equals(admin)}">
                 <article id="predefinidos" >
-                    <h2 style="margin: 0px;padding:0px;height:40px;"><a ${hrefAMiMismo} onclick="desplegar('predefinidos')">Términos predefinidos</a></h2>
+                    <h2 style="margin: 0px;padding:0px;height:40px;"><a ${hrefAMiMismo} onclick="desplegar('predefinidos')">Predefined Terms</a></h2>
                 <iframe width="100%" height="100%" src="/Aledania/perfil/${usuario.getLogin()}/predef?comb=n">
                 </iframe>
                 </article>
             </c:when>
         </c:choose>
         <article id="misTerminos" >
-            <h2 style="margin: 0px;padding:0px;height:40px;"><a ${hrefAMiMismo} onclick="desplegar('misTerminos')">Mis términos</a></h2>
+            <h2 style="margin: 0px;padding:0px;height:40px;"><a ${hrefAMiMismo} onclick="desplegar('misTerminos')">My Terms</a></h2>
             <iframe width="100%" height="100%" src="/Aledania/perfil/${usuario.getLogin()}/listarocult?comb=n">
             </iframe>
         </article>
         
         <article id="publicos" >
-            <h2 style="margin: 0px;padding:0px;height:40px;"><a ${hrefAMiMismo} onclick="desplegar('publicos')">Términos públicos</a></h2>
+            <h2 style="margin: 0px;padding:0px;height:40px;"><a ${hrefAMiMismo} onclick="desplegar('publicos')">Public Terms</a></h2>
             <iframe width="100%" height="100%" src="/Aledania/perfil/${usuario.getLogin()}/publiconoclick?comb=n">
             </iframe>
         </article>
+        </div>
         <tiles:insertDefinition name="footer" />
     </body>
 </html>
