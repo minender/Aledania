@@ -12,11 +12,11 @@ COPY aledania.sql /home
 USER postgres
 
 RUN /etc/init.d/postgresql start &&\ 
-    psql --command "CREATE USER dbuser WITH PASSWORD 'password';" &&\
-    psql --command "CREATE USER dbuser WITH PASSWORD 'password';" &&\
-    psql --command "CREATE DATABASE dbname OWNER dbuser;" &&\
-    psql --command "CREATE DATABASE dbname OWNER dbuser;" &&\
-    psql --command "\i /home/aledania.sql;" dbname &&\
+    psql --command "CREATE USER userdb WITH PASSWORD 'password';" &&\
+    psql --command "CREATE USER fedra WITH PASSWORD 'password';" &&\
+    psql --command "CREATE DATABASE namedb OWNER userdb;" &&\
+    psql --command "CREATE DATABASE namedb OWNER userdb;" &&\
+    psql --command "\i /home/aledania.sql;" aledania &&\
     /etc/init.d/postgresql stop
 
 EXPOSE 5432

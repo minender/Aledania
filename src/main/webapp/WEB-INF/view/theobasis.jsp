@@ -279,13 +279,17 @@ Which brings as a consequence the following corollary
 <br>
 </ol>
 </div>
+   <c:choose>
+    <c:when test="${!sesion.equals(logout)}">
         <footer>
          <div class="row footer-div">
           <span class="footer-login-span" >
-           federico
+           ${username}
           </span>
          </div>
         </footer>
+    </c:when>
+   </c:choose>
 </div>
  </body>
 </html>

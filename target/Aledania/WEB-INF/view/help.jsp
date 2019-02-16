@@ -240,7 +240,7 @@ However, by clicking on one of the rectangles, you can see the written term, whi
         <footer>
          <div class="row footer-div">
           <span class="footer-login-span" >
-           federico
+           ${username}
           </span>
          </div>
         </footer>

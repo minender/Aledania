@@ -10,8 +10,8 @@ public class TestDB {
 	{
 		try
 		{
-		String url = "jdbc:postgresql://db:5432/dbname";
-		String user = "dbuser";
+		String url = "jdbc:postgresql://db:5432/namedb";
+		String user = "userdb";
 		String password = "password";
 
 		// Load the Connector/J driver
