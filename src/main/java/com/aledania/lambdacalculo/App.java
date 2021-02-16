@@ -173,14 +173,14 @@ public class App extends Term{
     public List<Term> contandotraducBD()
     {
         List<Term> list1=p.contandotraducBD();
-        for(int i=0; i<list1.size() ;i++)
-            list1.set(i,new App(list1.get(i),q));
-        
         Term p1;
         if( list1.size() == 0 )
             p1=p;
         else
             p1 = list1.get(list1.size()-1);
+                
+        for(int i=0; i<list1.size() ;i++)
+            list1.set(i,new App(list1.get(i),q));
             
         List<Term> list2=q.contandotraducBD();
         for(int i=0; i<list2.size() ;i++)

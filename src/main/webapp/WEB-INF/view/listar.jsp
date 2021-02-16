@@ -99,6 +99,9 @@
             </c:choose>--%>
             ${mensaje}
        </center>
+    <div class="row blank-row">
+        
+    </div>
        <c:choose>
         <c:when test="${perfil.intValue()==1}">
                 <tiles:insertDefinition name="footer" />
