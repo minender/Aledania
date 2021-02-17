@@ -785,7 +785,7 @@ public abstract class Term implements Cloneable, Serializable{
         Redex redex=term.buscarRedexIzqFinal(null, false);
         while(reductions > 0 && redex != null)
         {
-            term=term.reducirFinal(corr);
+            term=term.reducirFinal(corr);        
             if (corr.reducciones == reductions)
                break;
             redex=term.buscarRedexIzqFinal(null, false);

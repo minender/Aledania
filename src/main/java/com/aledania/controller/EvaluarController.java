@@ -388,7 +388,6 @@ public class EvaluarController {
             corr.operations.add(new Integer(7));//agrego cualquier cosa
             
            //corr.terminos.set(0, tripla.term.replace("\\", "\\\\"));
-           
             map.addAttribute("usuario", usuarioManager.getUsuario(username));
             map.addAttribute("nReducciones",new Float(((float)corr.reducciones/(float)(corr.reducciones+corr.traducciones))*100));
             map.addAttribute("nTraduc",new Float(((float)corr.traducciones/(float)(corr.reducciones+corr.traducciones))*100));

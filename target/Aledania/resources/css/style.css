@@ -182,6 +182,10 @@ footer {
     background-color: #ffffff;
 }
 
+.blank-row {
+    padding:25px;
+}
+
 .description-index{
     padding:30px;
     margin:30px;
