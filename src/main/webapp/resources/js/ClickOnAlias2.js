@@ -21,7 +21,9 @@ function clickAlias2(Math1,alias,valorAlias)
         var index = parseInt(target.id.split("@")[2]);
 
         var math = MathJax.Hub.getAllJax(Math1)[1];
-        var originalText = math.originalText;
+        //var math = MathJax.startup.document.getMathItemsWithin(document.getElementById(Math1))[1];
+         var originalText = math.originalText; // for MathJax version 2
+        // var originalText = math.math;
         var newText;
 
         if(tipo == 'alias')
