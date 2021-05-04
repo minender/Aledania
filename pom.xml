@@ -13,6 +13,11 @@
 			<id>JBoss repository</id>
 			<url>http://repository.jboss.org/nexus/content/groups/public/</url>
 		</repository>
+                <repository>
+          <id>Central Maven repository</id>
+          <name>Central Maven repository https</name>
+          <url>https://repo.maven.apache.org/maven2</url>
+       </repository>
 	</repositories>
   <properties>
     <org.springframework.version>4.3.18.RELEASE</org.springframework.version>
