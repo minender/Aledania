@@ -293,13 +293,18 @@
         <artifactId>tiles-template</artifactId>
         <version>3.0.1</version>	
       </dependency>
-    <dependency>
+    <!--<dependency>
       <groupId>javax.servlet</groupId>
       <artifactId>javax.servlet</artifactId>
       <version>2.4.0.v200706111738</version>
       <type>jar</type>
       <scope>system</scope>
       <systemPath>/home/federico/NetBeansProjects/Logica/lib/javax.servlet-2.4.0.v200706111738.jar</systemPath>
+    </dependency>-->
+    <dependency>
+      <groupId>javax.servlet</groupId>
+      <artifactId>javax.servlet-api</artifactId>
+      <version>3.0.1</version>
     </dependency>
     <dependency>
       <groupId>org.aspectj</groupId>
