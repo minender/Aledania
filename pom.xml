@@ -335,7 +335,7 @@
   <build>
     <finalName>Aledania</finalName>
     <plugins>
-      <plugin>
+      <!--<plugin>
         <groupId>org.antlr</groupId>
         <artifactId>antlr4-maven-plugin</artifactId>
         <version>4.2.2</version>
@@ -347,7 +347,7 @@
             </goals>
           </execution>
         </executions>
-      </plugin>
+      </plugin>-->
       <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-dependency-plugin</artifactId>
@@ -360,7 +360,7 @@
                             <artifactItem>
                                 <groupId>com.heroku</groupId>
                                 <artifactId>webapp-runner</artifactId>
-                                <version>8.5.50.0</version>
+                                <version>9.0.41.0</version>
                                 <destFileName>webapp-runner.jar</destFileName>
                             </artifactItem>
                         </artifactItems>
