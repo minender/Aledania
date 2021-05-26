@@ -24,7 +24,7 @@ jobs:
         uses: akhileshns/heroku-deploy@v3.12.12
         with:
           heroku_api_key: ${{ secrets.HEROKU_API_TOKEN_DEVELOPMENT }}
-          heroku_app_name: "aledania"
+          heroku_app_name: "sheltered-reef-98824"
           heroku_email: "fflaviani@usb.ve"
       - name: Deploy App on Heroku
         run: mvn heroku:deploy-war
