@@ -1,0 +1,30 @@
+name: master
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up JDK 8
+        uses: actions/setup-java@v2
+        with:
+          java-version: '8'
+          distribution: 'adopt'
+      - name: Clean for Maven
+        run: mvn clean
+      - name: Build with Maven
+        run: mvn --batch-mode --update-snapshots verify --settings ./.mvn/custom-settings.xml
+      - name: Publish Project on Heroku
+        uses: akhileshns/heroku-deploy@v3.12.12
+        with:
+          heroku_api_key: ${{ secrets.HEROKU_API_TOKEN_DEVELOPMENT }}
+          heroku_app_name: "aledania"
+          heroku_email: "fflaviani@usb.ve"
+      - name: Deploy App on Heroku
+        run: mvn heroku:deploy-war
